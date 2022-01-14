@@ -4,6 +4,7 @@ import maya.cmds as cmds
 #
 
 
+# This creates a blank attribute that can be painted onto the mesh
 def createPaintAttribute(attrName):
 	attrText = cmds.textField(attrName, query=True, text=True)
 	print(attrText + ' ATTRIBUTE')
@@ -24,6 +25,8 @@ def openFileDialog(fileBox):
 	cmds.textField(fileBox, edit=True, text=returnText[0])
 
 
+# Writes the attribute weights to a file.
+# This output has a similar structure to an OBJ file
 def exportWeights(file, attr):
 	filename = cmds.textField(file, query=True, text=True)
 	attribute = cmds.textField(attr, query=True, text=True)
@@ -37,18 +40,12 @@ def exportWeights(file, attr):
 	raw_filename = r'{}'.format(filename)
 	fileObject = open(r'{}'.format(raw_filename), "w")
 
-	#cmds.progressWindow(title="Exporting Weights", min=0, max=len(weights))
 	i = 0
 	for w in weights:
-		#print(w)
-	#	cmds.progressWindow(edit=True, progress=i, status='Writing Weights ' + str(i/len(weights)))
 		fileObject.write("w " + str(w))
 		fileObject.write('\n')
 		i += 1
-	#cmds.progressWindow(endProgress=1)
 
-	#cmds.polyTriangulate(ch=)
-	#cmds.delete(ch=True)
 	triangles = cmds.polyEvaluate(f=True)
 	for i in range(triangles):
 		string = str(object[0]) + ".f[" + str(i) + "]"
@@ -86,11 +83,8 @@ fileLocationBox = cmds.textField()
 cmds.textField(fileLocationBox, edit=True, en=False, text=fileLocation)
 cmds.button(label='Chose File Location', command='openFileDialog(fileLocationBox)')
 
-#returnText = cmds.fileDialog2(fileFilter=textFilter, dialogStyle=2, fileMode=0)
-#print(returnText)
 cmds.button( label='Export Weights As File', command='exportWeights(fileLocationBox, name)' )
 cmds.button( label='Close', command=('cmds.deleteUI(\"' + window + '\", window=True)') )
-#cmds.textField( name, edit=True )
 
 # After painting, normalize
 
